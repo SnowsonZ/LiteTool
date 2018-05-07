@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.snowsonz.litetool.R;
+import com.example.snowsonz.litetool.express.model.InfoItemModel;
 import com.example.snowsonz.litetool.utils.CodeHelper;
 
 import java.util.List;

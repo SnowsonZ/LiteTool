@@ -1,4 +1,4 @@
-package com.example.snowsonz.litetool.express;
+package com.example.snowsonz.litetool.express.model;
 
 import java.util.List;
 

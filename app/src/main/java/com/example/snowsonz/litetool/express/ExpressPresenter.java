@@ -1,8 +1,10 @@
 package com.example.snowsonz.litetool.express;
 
 import android.annotation.SuppressLint;
-import android.widget.Toast;
 
+import com.example.snowsonz.litetool.express.model.ExpressInfoModel;
+import com.example.snowsonz.litetool.express.model.ExpressTypeModel;
+import com.example.snowsonz.litetool.express.model.ItemType;
 import com.example.snowsonz.litetool.network.RetrofitConfig;
 import com.example.snowsonz.litetool.utils.CodeHelper;
 
@@ -11,9 +13,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;

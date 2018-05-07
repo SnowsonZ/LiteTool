@@ -1,7 +1,7 @@
 package com.example.snowsonz.litetool.network;
 
-import com.example.snowsonz.litetool.express.ExpressInfoModel;
-import com.example.snowsonz.litetool.express.ExpressTypeModel;
+import com.example.snowsonz.litetool.express.model.ExpressInfoModel;
+import com.example.snowsonz.litetool.express.model.ExpressTypeModel;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
