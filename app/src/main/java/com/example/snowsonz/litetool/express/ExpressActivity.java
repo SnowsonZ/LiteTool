@@ -43,7 +43,8 @@ public class ExpressActivity extends AppCompatActivity implements View.OnClickLi
                 return;
             }
             mContainerExInfoLlayout.removeAllViews();
-            mPresenter.getExpressInfo(input.toString());
+//            mPresenter.getExpressInfo(input.toString());
+            mPresenter.testMap(input.toString());
         }
     }
 
