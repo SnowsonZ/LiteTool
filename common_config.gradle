@@ -1,0 +1,38 @@
+project.ext {
+
+    //java version
+    javaVersion = 8
+    javaMaxHeapSize = '4G'
+
+    //Android compile
+    compileSdkVersion = 26
+    buildToolsVersion = "26.0.2"
+    minSdkVersion = 17
+    targetSdkVersion = 26
+
+    //bugly config
+    buglyAppId = "a94f6c712b"
+    buglyAppKey = "be4cf5cf-cff8-482d-b0e4-02109ef95931"
+
+    //umeng config
+    umengAppKey = "5a47c1b9f43e485d37000065"
+    umengChannel = "channel_snowson_*0783"
+
+    //JDK版本兼容
+    sourceCompatibility = this.&getJavaVersion()
+    targetCompatibility = this.&getJavaVersion()
+
+}
+
+def getJavaVersion() {
+    switch (project.ext.javaVersion) {
+        case "6":
+            return JavaVersion.VERSION_1_6;
+        case "7":
+            return JavaVersion.VERSION_1_7;
+        case "8":
+            return JavaVersion.VERSION_1_8;
+        default:
+            return JavaVersion.VERSION_1_7;
+    }
+}

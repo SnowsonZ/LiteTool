@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">LiteTool</string>
+    <string name="tx_input_express_num">请输入运单号</string>
+    <string name="tv_func_query">快递查询</string>
+    <string name="btn_query">查询</string>
+</resources>
