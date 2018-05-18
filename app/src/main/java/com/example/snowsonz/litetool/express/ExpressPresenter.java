@@ -1,10 +1,7 @@
 package com.example.snowsonz.litetool.express;
 
-import android.annotation.SuppressLint;
-
-import com.example.snowsonz.litetool.express.model.ExpressInfoModel;
 import com.example.snowsonz.litetool.express.model.ExpressTypeModel;
-import com.example.snowsonz.litetool.express.model.ItemType;
+import com.example.snowsonz.litetool.network.ExpressService;
 import com.example.snowsonz.litetool.network.RetrofitConfig;
 import com.example.snowsonz.litetool.utils.CodeHelper;
 
@@ -12,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -30,46 +24,24 @@ public class ExpressPresenter {
         this.activity = activity;
     }
 
-    public String getExpressType() {
-        return null;
-
-    }
-
-    @SuppressLint("CheckResult")
-    public void getExpressInfo(String expressNum) {
+    public void requestExpressInfo(String expressNum) {
+        ExpressService service = RetrofitConfig.getExpressService();
         CodeHelper.showToast(activity, "获取中...");
-        RetrofitConfig.getExpressService().getExpressType("1", expressNum)
-                .flatMap(new Function<ExpressTypeModel, Observable<String>>() {
-                    @Override
-                    public Observable<String> apply(ExpressTypeModel expressTypeModel)
-                            throws Exception {
-                        List<String> types = new ArrayList<String>();
-                        for (ItemType type : expressTypeModel.getAuto()) {
-                            types.add(type.getComCode());
-                        }
-                        return Observable.fromIterable(types);
+        service.getExpressType("1", expressNum)
+                .flatMap(expressTypeModel -> {
+                    List<String> types = new ArrayList<>();
+                    for (ExpressTypeModel.ItemType type : expressTypeModel.getAuto()) {
+                        types.add(type.getComCode());
                     }
+                    return Observable.fromIterable(types);
                 })
-                .flatMap(new Function<String, ObservableSource<ExpressInfoModel>>() {
-                    @Override
-                    public ObservableSource<ExpressInfoModel> apply(String s) throws Exception {
-                        return RetrofitConfig.getExpressService().getExpressInfo(s, expressNum);
-                    }
-                })
+                .flatMap(s -> service.getExpressInfo(s, expressNum))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ExpressInfoModel>() {
-                    @Override
-                    public void accept(ExpressInfoModel expressInfoModel) throws Exception {
-                        if (expressInfoModel.getStatus().equals("200")) {
-                            activity.addExpressView(expressInfoModel.getData());
-                        }
+                .subscribe(expressInfoModel -> {
+                    if (expressInfoModel.getStatus().equals("200")) {
+                        activity.addExpressView(expressInfoModel.getData());
                     }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        CodeHelper.showToast(activity, "获取失败");
-                    }
-                });
+                }, throwable -> CodeHelper.showToast(activity, "获取失败"));
     }
 }

@@ -60,43 +60,43 @@ public class ExpressTypeModel {
     public void setAuto(List<ItemType> auto) {
         this.auto = auto;
     }
-}
 
-class ItemType {
-    private String comCode;
-    private String id;
-    private long noCount;
-    private String startTime;
+    public class ItemType {
+        private String comCode;
+        private String id;
+        private long noCount;
+        private String startTime;
 
-    public String getComCode() {
-        return comCode;
-    }
+        public String getComCode() {
+            return comCode;
+        }
 
-    public void setComCode(String comCode) {
-        this.comCode = comCode;
-    }
+        public void setComCode(String comCode) {
+            this.comCode = comCode;
+        }
 
-    public String getId() {
-        return id;
-    }
+        public String getId() {
+            return id;
+        }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+        public void setId(String id) {
+            this.id = id;
+        }
 
-    public long getNoCount() {
-        return noCount;
-    }
+        public long getNoCount() {
+            return noCount;
+        }
 
-    public void setNoCount(long noCount) {
-        this.noCount = noCount;
-    }
+        public void setNoCount(long noCount) {
+            this.noCount = noCount;
+        }
 
-    public String getStartTime() {
-        return startTime;
-    }
+        public String getStartTime() {
+            return startTime;
+        }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
     }
 }

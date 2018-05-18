@@ -1,9 +1,11 @@
 package com.example.snowsonz.litetool.express;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,10 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.snowsonz.litetool.R;
-import com.example.snowsonz.litetool.express.model.InfoItemModel;
+import com.example.snowsonz.litetool.express.model.ExpressInfoModel;
 import com.example.snowsonz.litetool.utils.CodeHelper;
 
 import java.util.List;
+
+import static android.text.Html.FROM_HTML_MODE_LEGACY;
 
 public class ExpressActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,8 +48,7 @@ public class ExpressActivity extends AppCompatActivity implements View.OnClickLi
                 return;
             }
             mContainerExInfoLlayout.removeAllViews();
-//            mPresenter.getExpressInfo(input.toString());
-            mPresenter.testMap(input.toString());
+            mPresenter.requestExpressInfo(input.toString());
         }
     }
 
@@ -56,17 +59,22 @@ public class ExpressActivity extends AppCompatActivity implements View.OnClickLi
         mQueryBtn.setOnClickListener(this);
     }
 
-    public void addExpressView(List<InfoItemModel> expressInfo) {
+    public void addExpressView(List<ExpressInfoModel.InfoItemModel> expressInfo) {
         if (CodeHelper.isEmpty(expressInfo)) {
             return;
         }
         LayoutInflater inflater = LayoutInflater.from(this);
-        for (InfoItemModel item : expressInfo) {
+        for (ExpressInfoModel.InfoItemModel item : expressInfo) {
             View itemView = inflater.inflate(R.layout.item_express_info,
                     mContainerExInfoLlayout, false);
             TextView itemInfoTv = itemView.findViewById(R.id.tv_item_ex_info);
+            TextView timeTv = itemView.findViewById(R.id.tv_item_time);
+            String ftime = item.getFtime();
+            Log.d(ExpressActivity.this.getClass().getName(), "123\n456");
+            timeTv.setText(ftime.replaceAll(" ", "\n"));
             itemInfoTv.setText(item.getContext());
             mContainerExInfoLlayout.addView(itemView);
+
         }
     }
 }
