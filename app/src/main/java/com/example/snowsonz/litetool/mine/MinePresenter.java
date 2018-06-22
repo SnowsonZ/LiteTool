@@ -8,6 +8,7 @@ import com.example.snowsonz.litetool.utils.CodeHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -21,15 +22,31 @@ public class MinePresenter {
         this.activity = activity;
     }
 
-    public void uploadPhoto(RequestBody photo, RequestBody description) {
+    public void uploadFileMulti(RequestBody photo, RequestBody description) {
         if (photo == null || description == null) {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUpload(photo, description)
+        fileService.fileUploadMulti(photo, description)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CommonObserver<String>(disposables, activity, "") {
+                .subscribe(new CommonObserver<String>(disposables, activity, "file/upload") {
+                    @Override
+                    public void onNext(String s) {
+                        CodeHelper.showToast(activity, s);
+                    }
+                });
+    }
+
+    public void uploadFileSingle(RequestBody file) {
+        if(file == null) {
+            return;
+        }
+        FileService fileService = RetrofitConfig.getFileService();
+        fileService.fileUploadSingle(file)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CommonObserver<String>(disposables, activity, "file/") {
                     @Override
                     public void onNext(String s) {
                         CodeHelper.showToast(activity, s);

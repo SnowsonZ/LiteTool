@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.snowsonz.litetool.express.ExpressActivity;
+import com.example.snowsonz.litetool.mine.MineActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        startActivity(new Intent(this, ExpressActivity.class));
+        startActivity(new Intent(this, MineActivity.class));
     }
 
     public void initView() {

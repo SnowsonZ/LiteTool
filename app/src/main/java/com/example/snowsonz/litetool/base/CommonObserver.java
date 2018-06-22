@@ -12,9 +12,9 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 public abstract class CommonObserver<T> implements Observer<T> {
-    List<Disposable> disposables;
-    Context context;
-    String url;
+    private List<Disposable> disposables;
+    private Context context;
+    private String url;
 
     public CommonObserver(@NonNull List<Disposable> disposables, @NonNull Context context,
                           @NonNull String url) {
