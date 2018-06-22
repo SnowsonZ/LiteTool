@@ -1,7 +1,5 @@
 package com.example.snowsonz.litetool.network;
 
-import android.content.Context;
-
 import com.example.snowsonz.litetool.MainApplication;
 
 import java.io.File;

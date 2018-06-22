@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".express.ExpressActivity" android:label="快递查询"/>
+        <activity
+            android:name=".express.ExpressActivity"
+            android:label="快递查询" />
+        <activity android:name=".mine.MineActivity"></activity>
     </application>
 
 </manifest>

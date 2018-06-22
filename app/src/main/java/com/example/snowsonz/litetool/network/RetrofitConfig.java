@@ -9,4 +9,8 @@ public class RetrofitConfig {
     public static ExpressService getExpressService() {
         return RetrofitClient.getInstance().create(ExpressService.class);
     }
+
+    public static FileService getFileService() {
+        return RetrofitClient.getInstance().create(FileService.class);
+    }
 }
