@@ -54,24 +54,24 @@ public class MineActivity extends AppCompatActivity {
     private void uploadFile() {
         mPresenter = new MinePresenter(this);
         File photoFile = new File(BASE_PATH, "avatar.jpg");
-//        File descriptionFile = new File(BASE_PATH, "description.json");
-//        RequestBody photo = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("file", "avatar.jpg",
-//                        RequestBody.create(MediaType.parse("image/jpg"), photoFile))
-//                .build();
-//        RequestBody description = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("description", "description.json",
-//                        RequestBody.create(MediaType.parse("text/json; charset=utf-8"), descriptionFile))
-//                .build();
+        File descFile = new File(BASE_PATH, "description.json");
         RequestBody photo
-                = RequestBody.create(MediaType.parse("image/jpg"), photoFile);
-//        Request request = new Request.Builder().
-//        RequestBody description
-//                = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
-//                descriptionFile);
-        mPresenter.uploadFileSingle(photo);
+                = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        MultipartBody.Part partPhoto = MultipartBody.Part.createFormData("avatar",
+                "avatar.jpg", photo);
+        RequestBody desc = RequestBody.create(MediaType.parse("multipart/form-data"), descFile);
+        MultipartBody.Part partDesc = MultipartBody.Part.createFormData("description",
+                "description.json", desc);
+        RequestBody desc2 = RequestBody.create(MediaType.parse("text/plain"), "多文件上传");
+
+        //多文件
+//        mPresenter.uploadFileMulti(partPhoto, partDesc);
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        parts.add(partDesc);
+        parts.add(partPhoto);
+        mPresenter.uploadFileList(desc2, parts);
+        //单个文件
+//        mPresenter.uploadFileSingle(partPhoto);
     }
 
     @Override

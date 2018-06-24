@@ -1,20 +1,37 @@
 package com.example.snowsonz.litetool.network;
 
 
+import com.example.snowsonz.litetool.mine.model.BackStatus;
+
+import org.json.JSONObject;
+
+import java.util.List;
+
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface FileService {
     //文件上传
     @Multipart
     @POST("file/uploads")
-    Observable<String> fileUploadMulti(@Part("photo") RequestBody file,
-                                       @Part("description") RequestBody description);
+    Observable<BackStatus> fileUploadMulti(@Part MultipartBody.Part photo,
+                                       @Part MultipartBody.Part desc);
 
     @Multipart
     @POST("file/upload")
-    Observable<String> fileUploadSingle(@Part("file") RequestBody file);
+    Observable<BackStatus> fileUploadSingle(@Part("file\"; filename=\"avatar.jpg") RequestBody file);
+
+    @Multipart
+    @POST("file/upload")
+    Observable<BackStatus> fileUploadSingle(@Part MultipartBody.Part file);
+
+    @Multipart
+    @POST("file/list")
+    Observable<BackStatus> fileUploadList(@Part("desc") RequestBody desc,
+                                          @Part List<MultipartBody.Part> parts);
 }
