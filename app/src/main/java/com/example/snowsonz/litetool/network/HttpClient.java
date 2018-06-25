@@ -34,8 +34,7 @@ public class HttpClient {
         instance = new OkHttpClient().newBuilder().cache(cache)
                 .retryOnConnectionFailure(true)
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(new HttpInfoInterceptor())
-                .build();
+                .addInterceptor(new HttpInfoInterceptor()).build();
         return instance;
     }
 }

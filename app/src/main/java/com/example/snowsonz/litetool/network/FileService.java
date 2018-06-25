@@ -15,24 +15,28 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface FileService {
     //文件上传
     @Multipart
     @POST("file/uploads")
-    Observable<BackStatus> fileUploadMulti(@Part MultipartBody.Part photo,
+    Observable<BackStatus> fileUploadMulti(@Url String url,
+                                           @Part MultipartBody.Part photo,
                                            @Part MultipartBody.Part desc);
 
     @Multipart
     @POST("file/upload")
-    Observable<BackStatus> fileUploadSingle(@Part("file\"; filename=\"avatar.jpg") RequestBody file);
+    Observable<BackStatus> fileUploadSingle(@Url String url,
+                                            @Part("file\"; filename=\"avatar.jpg") RequestBody file);
 
     @Multipart
     @POST("file/upload")
-    Observable<BackStatus> fileUploadSingle(@Part MultipartBody.Part file);
+    Observable<BackStatus> fileUploadSingle(@Url String url, @Part MultipartBody.Part file);
 
     @Multipart
     @POST("file/list")
-    Observable<BackStatus> fileUploadList(@Part("desc") RequestBody desc,
+    Observable<BackStatus> fileUploadList(@Url String url,
+                                          @Part("desc") RequestBody desc,
                                           @Part List<MultipartBody.Part> files);
 }

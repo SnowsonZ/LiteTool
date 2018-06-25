@@ -5,6 +5,7 @@ import com.example.snowsonz.litetool.mine.model.BackStatus;
 import com.example.snowsonz.litetool.network.FileService;
 import com.example.snowsonz.litetool.network.RetrofitConfig;
 import com.example.snowsonz.litetool.utils.CodeHelper;
+import com.example.snowsonz.litetool.utils.HttpConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadMulti(photo, description)
+        fileService.fileUploadMulti(HttpConstants.BASE_URL_LOCAL, photo, description)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/upload") {
@@ -44,7 +45,7 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadList(desc, parts)
+        fileService.fileUploadList(HttpConstants.BASE_URL_LOCAL, desc, parts)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/list") {
@@ -60,10 +61,10 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadSingle(file)
+        fileService.fileUploadSingle(HttpConstants.BASE_URL_LOCAL, file)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/") {
+                .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/upload") {
                     @Override
                     public void onNext(BackStatus s) {
                         CodeHelper.showToast(activity, s.getStatus());
@@ -76,10 +77,10 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadSingle(part)
+        fileService.fileUploadSingle(HttpConstants.BASE_URL_LOCAL, part)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/") {
+                .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/upload") {
                     @Override
                     public void onNext(BackStatus s) {
                         CodeHelper.showToast(activity, s.getStatus());

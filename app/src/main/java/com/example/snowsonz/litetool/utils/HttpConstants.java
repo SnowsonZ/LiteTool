@@ -12,6 +12,6 @@ public class HttpConstants {
     //快递详情
     public static final String API_EXPRESS_INFO
             = "http://www.kuaidi100.com/query?type=zhongtong&postid=539408362786";
-    public static final String BASE_URL = "http://dev.tunnel.qydev.com";
-//    public static final String BASE_URL = "http://www.kuaidi100.com";
+    public static final String BASE_URL_LOCAL = "http://dev.tunnel.qydev.com";
+    public static final String BASE_URL_EXPRESS = "http://www.kuaidi100.com";
 }

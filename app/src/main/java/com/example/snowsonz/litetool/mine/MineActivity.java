@@ -25,11 +25,16 @@ public class MineActivity extends AppCompatActivity {
     private String BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()
             + "/test";
     private List<Disposable> disposables = new ArrayList<>();
+    private File photoFile;
+    private File descFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
+        mPresenter = new MinePresenter(this);
+        photoFile = new File(BASE_PATH, "avatar.jpg");
+        descFile = new File(BASE_PATH, "description.json");
 
         //上传照片
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -50,11 +55,10 @@ public class MineActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 上传多个文件 list type
+     */
     private void uploadList() {
-        mPresenter = new MinePresenter(this);
-        File photoFile = new File(BASE_PATH, "avatar.jpg");
-        File descFile = new File(BASE_PATH, "description.json");
-        //ArrayList上传多文件
         RequestBody desc2 = RequestBody.create(MediaType.parse("text/plain"), "多文件上传");
 
         RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
@@ -72,6 +76,28 @@ public class MineActivity extends AppCompatActivity {
         mPresenter.uploadFileList(desc2, parts);
         //单个文件
 //        mPresenter.uploadFileSingle(partPhoto);
+    }
+
+    private void uploadSingleByRequestBody() {
+        RequestBody rbPhoto = RequestBody.create(MediaType.parse("image/*"), photoFile);
+        mPresenter.uploadFileSingle(rbPhoto);
+    }
+
+    private void uploadSingleByMultiBodyPart() {
+        RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file",
+                photoFile.getName(), rbPhoto);
+        mPresenter.uploadFileSingle(part);
+    }
+
+    private void uploadMutilKnowCount() {
+        RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        MultipartBody.Part pPhoto = MultipartBody.Part.createFormData("avatar",
+                photoFile.getName(), rbPhoto);
+        RequestBody rbDesc = RequestBody.create(MediaType.parse("multipart/form-data"), descFile);
+        MultipartBody.Part pDesc = MultipartBody.Part.createFormData("desc",
+                descFile.getName(), rbDesc);
+        mPresenter.uploadFileMulti(pPhoto, pDesc);
     }
 
     @Override
