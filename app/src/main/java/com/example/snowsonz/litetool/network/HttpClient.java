@@ -1,6 +1,7 @@
 package com.example.snowsonz.litetool.network;
 
 import com.example.snowsonz.litetool.MainApplication;
+import com.example.snowsonz.litetool.network.interceptor.HttpInfoInterceptor;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +33,9 @@ public class HttpClient {
                 1024 * 1024 * 100);
         instance = new OkHttpClient().newBuilder().cache(cache)
                 .retryOnConnectionFailure(true)
-                .connectTimeout(10, TimeUnit.SECONDS).build();
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(new HttpInfoInterceptor())
+                .build();
         return instance;
     }
 }

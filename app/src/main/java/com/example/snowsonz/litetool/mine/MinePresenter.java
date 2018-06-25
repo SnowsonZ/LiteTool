@@ -47,7 +47,7 @@ public class MinePresenter {
         fileService.fileUploadList(desc, parts)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/") {
+                .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/list") {
                     @Override
                     public void onNext(BackStatus s) {
                         CodeHelper.showToast(activity, s.getStatus());

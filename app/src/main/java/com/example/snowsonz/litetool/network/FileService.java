@@ -10,6 +10,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Field;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -20,7 +21,7 @@ public interface FileService {
     @Multipart
     @POST("file/uploads")
     Observable<BackStatus> fileUploadMulti(@Part MultipartBody.Part photo,
-                                       @Part MultipartBody.Part desc);
+                                           @Part MultipartBody.Part desc);
 
     @Multipart
     @POST("file/upload")
@@ -33,5 +34,5 @@ public interface FileService {
     @Multipart
     @POST("file/list")
     Observable<BackStatus> fileUploadList(@Part("desc") RequestBody desc,
-                                          @Part List<MultipartBody.Part> parts);
+                                          @Part List<MultipartBody.Part> files);
 }

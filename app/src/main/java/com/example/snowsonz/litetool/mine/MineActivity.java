@@ -17,7 +17,6 @@ import java.util.List;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 
 public class MineActivity extends AppCompatActivity {
@@ -39,7 +38,7 @@ public class MineActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .subscribe(granted -> {
                         if (granted) {
-                            uploadFile();
+                            uploadList();
                         } else {
                             CodeHelper.showToast(MineActivity.this, "读取SD卡权限被禁止，" +
                                     "部分功能可能无法使用");
@@ -47,28 +46,29 @@ public class MineActivity extends AppCompatActivity {
                     })
             );
         } else {
-            uploadFile();
+            uploadList();
         }
     }
 
-    private void uploadFile() {
+    private void uploadList() {
         mPresenter = new MinePresenter(this);
         File photoFile = new File(BASE_PATH, "avatar.jpg");
         File descFile = new File(BASE_PATH, "description.json");
-        RequestBody photo
-                = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
-        MultipartBody.Part partPhoto = MultipartBody.Part.createFormData("avatar",
-                "avatar.jpg", photo);
-        RequestBody desc = RequestBody.create(MediaType.parse("multipart/form-data"), descFile);
-        MultipartBody.Part partDesc = MultipartBody.Part.createFormData("description",
-                "description.json", desc);
+        //ArrayList上传多文件
         RequestBody desc2 = RequestBody.create(MediaType.parse("text/plain"), "多文件上传");
+
+        RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        MultipartBody.Part pPhoto                     //name必须与协议一致，否则传输失败
+                = MultipartBody.Part.createFormData("files", photoFile.getName(), rbPhoto);
+        RequestBody rbDesc = RequestBody.create(MediaType.parse("multipart/form-data"), descFile);
+        MultipartBody.Part pDesc
+                = MultipartBody.Part.createFormData("files", descFile.getName(), rbDesc);
 
         //多文件
 //        mPresenter.uploadFileMulti(partPhoto, partDesc);
         List<MultipartBody.Part> parts = new ArrayList<>();
-        parts.add(partDesc);
-        parts.add(partPhoto);
+        parts.add(pDesc);
+        parts.add(pPhoto);
         mPresenter.uploadFileList(desc2, parts);
         //单个文件
 //        mPresenter.uploadFileSingle(partPhoto);
