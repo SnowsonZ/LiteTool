@@ -30,6 +30,7 @@ public class RetrofitClient {
                 .client(HttpClient.getInstance())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(HttpConstants.BASE_URL_LOCAL)
                 .build();
         return instance;
     }

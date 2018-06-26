@@ -5,8 +5,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.snowsonz.litetool.R;
+import com.example.snowsonz.litetool.network.ProgressRequestBody;
+import com.example.snowsonz.litetool.network.listener.ProgressListener;
 import com.example.snowsonz.litetool.utils.CodeHelper;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -27,13 +32,50 @@ public class MineActivity extends AppCompatActivity {
     private List<Disposable> disposables = new ArrayList<>();
     private File photoFile;
     private File descFile;
+    private ProgressListener mListener = new ProgressListener() {
+        @Override
+        public void updateProgress(int precent) {
+            mProgressPb.setProgress(precent);
+            mProgressTv.setText(String.valueOf(precent + "%"));
+        }
+
+        @Override
+        public void fileStart(int index) {
+            mIndexTv.setText(String.valueOf("正在上传第" + index + "个文件"));
+        }
+
+        @Override
+        public void fileEnd(int index) {
+            CodeHelper.showToast(MineActivity.this,
+                    String.valueOf("第" + index + "个文件上传完毕"));
+        }
+
+        @Override
+        public void completed() {
+            CodeHelper.showToast(MineActivity.this, "所有文件上传完毕");
+            mIndexTv.setText("");
+        }
+    };
+    private ProgressBar mProgressPb;
+    private TextView mProgressTv;
+    private TextView mIndexTv;
+
+    private void initView() {
+        mProgressPb = findViewById(R.id.pb_progress);
+        mProgressTv = findViewById(R.id.tv_progress);
+        mIndexTv = findViewById(R.id.tv_index);
+
+        mProgressPb.setMax(100);
+        mProgressTv.setText("0%");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
+        initView();
         mPresenter = new MinePresenter(this);
-        photoFile = new File(BASE_PATH, "avatar.jpg");
+        photoFile = new File(BASE_PATH, "bg.png");
         descFile = new File(BASE_PATH, "description.json");
 
         //上传照片
@@ -41,17 +83,19 @@ public class MineActivity extends AppCompatActivity {
             RxPermissions rxPermissions = new RxPermissions(this);
             disposables.add(rxPermissions.request(Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .subscribe(granted -> {
-                        if (granted) {
-                            uploadList();
-                        } else {
-                            CodeHelper.showToast(MineActivity.this, "读取SD卡权限被禁止，" +
-                                    "部分功能可能无法使用");
-                        }
-                    })
+                            .subscribe(granted -> {
+                                if (granted) {
+//                            uploadList();
+                                    uploadProgressList();
+                                } else {
+                                    CodeHelper.showToast(MineActivity.this, "读取SD卡权限被禁止，" +
+                                            "部分功能可能无法使用");
+                                }
+                            })
             );
         } else {
-            uploadList();
+//            uploadList();
+            uploadProgressList();
         }
     }
 
@@ -61,10 +105,10 @@ public class MineActivity extends AppCompatActivity {
     private void uploadList() {
         RequestBody desc2 = RequestBody.create(MediaType.parse("text/plain"), "多文件上传");
 
-        RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        RequestBody rbPhoto = RequestBody.create(MultipartBody.FORM, photoFile);
         MultipartBody.Part pPhoto                     //name必须与协议一致，否则传输失败
                 = MultipartBody.Part.createFormData("files", photoFile.getName(), rbPhoto);
-        RequestBody rbDesc = RequestBody.create(MediaType.parse("multipart/form-data"), descFile);
+        RequestBody rbDesc = RequestBody.create(MultipartBody.FORM, descFile);
         MultipartBody.Part pDesc
                 = MultipartBody.Part.createFormData("files", descFile.getName(), rbDesc);
 
@@ -78,23 +122,36 @@ public class MineActivity extends AppCompatActivity {
 //        mPresenter.uploadFileSingle(partPhoto);
     }
 
+
+    private void uploadProgressList() {
+        List<File> files = new ArrayList<>();
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        files.add(photoFile);
+
+        ProgressRequestBody rb = ProgressRequestBody.create(files, MultipartBody.FORM, mListener);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("files", files.get(0).getName(), rb);
+        parts.add(part);
+        RequestBody rbDesc = RequestBody.create(MediaType.parse("text/plain"), "多文件上传");
+        mPresenter.uploadFileList(rbDesc, parts);
+    }
+
     private void uploadSingleByRequestBody() {
         RequestBody rbPhoto = RequestBody.create(MediaType.parse("image/*"), photoFile);
         mPresenter.uploadFileSingle(rbPhoto);
     }
 
     private void uploadSingleByMultiBodyPart() {
-        RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        RequestBody rbPhoto = RequestBody.create(MultipartBody.FORM, photoFile);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file",
                 photoFile.getName(), rbPhoto);
         mPresenter.uploadFileSingle(part);
     }
 
     private void uploadMutilKnowCount() {
-        RequestBody rbPhoto = RequestBody.create(MediaType.parse("multipart/form-data"), photoFile);
+        RequestBody rbPhoto = RequestBody.create(MultipartBody.FORM, photoFile);
         MultipartBody.Part pPhoto = MultipartBody.Part.createFormData("avatar",
                 photoFile.getName(), rbPhoto);
-        RequestBody rbDesc = RequestBody.create(MediaType.parse("multipart/form-data"), descFile);
+        RequestBody rbDesc = RequestBody.create(MultipartBody.FORM, descFile);
         MultipartBody.Part pDesc = MultipartBody.Part.createFormData("desc",
                 descFile.getName(), rbDesc);
         mPresenter.uploadFileMulti(pPhoto, pDesc);

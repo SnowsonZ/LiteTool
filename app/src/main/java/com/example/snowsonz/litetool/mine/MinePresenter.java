@@ -7,6 +7,7 @@ import com.example.snowsonz.litetool.network.RetrofitConfig;
 import com.example.snowsonz.litetool.utils.CodeHelper;
 import com.example.snowsonz.litetool.utils.HttpConstants;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +25,16 @@ public class MinePresenter {
         this.activity = activity;
     }
 
+    public void uploadFile(String desc, List<File> files) {
+
+    }
+
     public void uploadFileMulti(MultipartBody.Part photo, MultipartBody.Part description) {
         if (photo == null || description == null) {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadMulti(HttpConstants.BASE_URL_LOCAL, photo, description)
+        fileService.fileUploadMulti(photo, description)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/upload") {
@@ -45,7 +50,7 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadList(HttpConstants.BASE_URL_LOCAL, desc, parts)
+        fileService.fileUploadList(desc, parts)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/list") {
@@ -61,7 +66,7 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadSingle(HttpConstants.BASE_URL_LOCAL, file)
+        fileService.fileUploadSingle(file)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/upload") {
@@ -77,7 +82,7 @@ public class MinePresenter {
             return;
         }
         FileService fileService = RetrofitConfig.getFileService();
-        fileService.fileUploadSingle(HttpConstants.BASE_URL_LOCAL, part)
+        fileService.fileUploadSingle(part)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CommonObserver<BackStatus>(disposables, activity, "file/upload") {
